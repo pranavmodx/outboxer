@@ -1,0 +1,30 @@
+services:
+  debezium-connect:
+    image: debezium/connect:2.5
+    depends_on:
+      - kafka
+      - postgres
+    ports:
+      - "8083:8083"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:29092
+      GROUP_ID: outbox-connect
+      CONFIG_STORAGE_TOPIC: _connect-configs
+      OFFSET_STORAGE_TOPIC: _connect-offsets
+      STATUS_STORAGE_TOPIC: _connect-status
+      CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_CONFIG_PROVIDERS: env
+      CONNECT_CONFIG_PROVIDERS_ENV_CLASS: org.apache.kafka.common.config.provider.EnvVarConfigProvider
+      DB_HOST: ${DB_HOST:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-outbox}
+      DB_PASSWORD: ${DB_PASSWORD:-outbox}
+      DB_NAME: ${DB_NAME:-outbox}
+      DB_SERVER_NAME: ${DB_SERVER_NAME:-outbox}
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8083/connectors" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10

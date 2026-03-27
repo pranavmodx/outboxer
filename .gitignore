@@ -1,0 +1,25 @@
+# Go
+bin/
+*.exe
+*.test
+*.prof
+
+# OS
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Debezium
+debezium/offsets.dat
+debezium/storage.dat
+
+# Drafts
+linkedin_post.md
+
+linkedin_final.txt

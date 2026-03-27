@@ -1,0 +1,17 @@
+services:
+  debezium-server:
+    image: quay.io/debezium/server:2.5
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - DEBEZIUM_OPTS=-Xmx512m
+      - DB_HOST=${DB_HOST:-postgres}
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-outbox}
+      - DB_PASSWORD=${DB_PASSWORD:-outbox}
+      - DB_NAME=${DB_NAME:-outbox}
+      - DB_SERVER_NAME=${DB_SERVER_NAME:-outbox}
+    volumes:
+      - ./debezium/application.properties:/debezium/conf/application.properties
+#      - ./debezium/plugins/debezium-scripting-2.5.4.Final.jar:/debezium/lib/debezium-scripting-2.5.4.Final.jar
